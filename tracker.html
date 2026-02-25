@@ -283,6 +283,30 @@
         font-size: 14px;
         padding: 6px 10px;
       }
+
+    }
+
+    /* Desktop Split Layout */
+    @media (min-width: 1000px) {
+
+      .main-layout {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 30px;
+        align-items: start;
+        padding: 20px;
+      }
+
+      .calendar-section {
+        position: sticky;
+        top: 90px;
+        /* below header */
+      }
+
+      .calendar {
+        padding: 0;
+      }
+
     }
   </style>
 </head>
@@ -290,42 +314,40 @@
 <body>
 
   <div class="container">
-    <div class="header">
-      <div>
-        <h2>Codeforces Activity</h2>
-        <div id="username"></div>
+
+    <div class="header">...</div>
+    <div class="nav">...</div>
+
+    <!-- NEW WRAPPER -->
+    <div class="main-layout">
+
+      <!-- LEFT SIDE -->
+      <div class="calendar-section">
+        <div class="calendar" id="calendar"></div>
       </div>
 
-      <button onclick="toggleDark()" class="theme-btn">
-        Dark/Light Mode
-      </button>
-    </div>
+      <!-- RIGHT SIDE -->
+      <div class="info-section">
+        <div class="section stats" id="stats"></div>
 
-    <div class="nav">
-      <button onclick="changeMonth(-1)">◀</button>
-      <div id="monthTitle"></div>
-      <button onclick="changeMonth(1)">▶</button>
-    </div>
+        <div class="details-grid">
+          <div class="section">
+            <h3>✅ Solved</h3>
+            <div id="solved"></div>
+          </div>
 
-    <div class="calendar" id="calendar"></div>
+          <div class="section">
+            <h3>❌ Upsolved</h3>
+            <div id="upsolved"></div>
+          </div>
+        </div>
 
-    <div class="section stats" id="stats"></div>
-
-    <div class="details-grid">
-      <div class="section">
-        <h3>✅ Solved</h3>
-        <div id="solved"></div>
+        <div class="section">
+          <h3>🧠 Topics</h3>
+          <div id="topics"></div>
+        </div>
       </div>
 
-      <div class="section">
-        <h3>❌ Upsolved</h3>
-        <div id="upsolved"></div>
-      </div>
-
-      <div class="section">
-        <h3>🧠 Topics</h3>
-        <div id="topics"></div>
-      </div>
     </div>
 
   </div>

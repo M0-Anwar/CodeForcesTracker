@@ -4,6 +4,7 @@
 const params = new URLSearchParams(window.location.search);
 const handle = params.get("user") || "tourist";
 
+
 let submissions = [];
 let dataByDate = {};
 let selectedDate = null;
