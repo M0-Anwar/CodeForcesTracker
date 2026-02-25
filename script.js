@@ -1,8 +1,8 @@
-// const handle = "Mo-Anwar";
-// document.getElementById("username").innerText = handle;
 
 const params = new URLSearchParams(window.location.search);
 const handle = params.get("user") || "tourist";
+// const handle = "Mo-Anwar";
+document.getElementById("username").innerText = handle;
 
 
 let submissions = [];
