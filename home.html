@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CF Tracker Home</title>
+
+  <style>
+    :root {
+      --bg: #f2f3f7;
+      --card: white;
+      --text: black;
+      --header: #1f2937;
+      --border: #ddd;
+      --btn: #3b82f6;
+    }
+
+    body.dark {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e5e7eb;
+      --header: #0b1220;
+      --border: #334155;
+      --btn: #2563eb;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: var(--bg);
+      color: var(--text);
+      transition: 0.3s;
+    }
+
+    .header {
+      background: var(--header);
+      color: white;
+      padding: 15px 25px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .users-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .user-btn {
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: var(--btn);
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .user-btn:hover {
+      opacity: 0.9;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .go-btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: var(--btn);
+      color: white;
+      cursor: pointer;
+    }
+
+    .theme-btn {
+      /* margin-top: 20px; */
+      padding: 8px 14px;
+      border: none;
+      border-radius: 8px;
+      background: var(--btn);
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body class="dark">
+
+  <div class="header">
+    <h1>📊 Codeforces Tracker</h1>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>👥 Important Users</h2>
+
+      <div class="users-grid">
+        <button class="user-btn" onclick="goToUser('Mo-Anwar')">Mo-Anwar</button>
+        <button class="user-btn" onclick="goToUser('AmrYasser1')">AmrYasser1</button>
+        <button class="user-btn" onclick="goToUser('yehia.')">yehia.</button>
+        <button class="user-btn" onclick="goToUser('Hazemam')">Hazemam</button>
+        <button class="user-btn" onclick="goToUser('AbdoMo')">AbdoMo</button>
+        <button class="user-btn" onclick="goToUser('Domzi1')">Domzi1</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🔍 Search Any User</h2>
+
+      <div class="input-group">
+        <input type="text" id="usernameInput" placeholder="Enter Codeforces handle..." />
+        <button class="go-btn" onclick="goFromInput()">Go</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Load saved theme on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedTheme = localStorage.getItem("theme");
+
+      if (savedTheme === "light") {
+        document.body.classList.remove("dark");
+      } else {
+        document.body.classList.add("dark"); // default
+      }
+      const btn = document.getElementById("themeBtn");
+      btn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+    });
+
+    function toggleTheme() {
+    const btn = document.getElementById("themeBtn");
+
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark")) {
+      localStorage.setItem("theme", "dark");
+      btn.textContent = "☀️";
+    } else {
+      localStorage.setItem("theme", "light");
+      btn.textContent = "🌙";
+    }
+  }
+
+    function goToUser(user) {
+      window.location.href =
+        `https://m0-anwar.github.io/CodeForcesTracker/tracker.html?user=${user}`;
+    }
+
+    function goFromInput() {
+      const input = document.getElementById("usernameInput").value.trim();
+      if (input !== "") {
+        window.location.href = `tracker.html?user=${input}`;
+      }
+    }
+  </script>
+
+</body>
+</html>
