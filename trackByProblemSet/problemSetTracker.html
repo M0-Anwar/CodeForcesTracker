@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Codeforces Tracker</title>
+<style>
+  :root {
+    --bg: #07142f;
+    --bg-soft: #0d1d42;
+    --panel: #18284a;
+    --panel-2: #203254;
+    --line: rgba(255,255,255,0.08);
+    --text: #edf2ff;
+    --muted: #a8b6d8;
+    --primary: #2f6cf6;
+    --primary-2: #4d84ff;
+    --ok: #2f9e44;
+    --no: rgba(255,255,255,0.05);
+    --shadow: 0 18px 40px rgba(0,0,0,0.22);
+    --radius: 18px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top, rgba(47,108,246,0.16), transparent 28%),
+      linear-gradient(180deg, #051129 0%, var(--bg) 38%, #06112a 100%);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .page {
+    width: min(1180px, calc(100% - 24px));
+    margin: 0 auto;
+    padding: 22px 0 36px;
+  }
+
+  .hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 8px 28px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brand-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    font-size: 26px;
+    background: linear-gradient(135deg, rgba(47,108,246,0.18), rgba(77,132,255,0.28));
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: var(--shadow);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.08;
+  }
+
+  .subtitle {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .grid {
+    display: grid;
+    gap: 18px;
+  }
+
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    backdrop-filter: blur(8px);
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 18px;
+  }
+
+  .card h2 {
+    margin: 0 0 14px;
+    font-size: clamp(20px, 2vw, 28px);
+  }
+
+  .muted {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: -4px;
+    margin-bottom: 14px;
+  }
+
+  .row, .input-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  input[type="text"], input[type="file"] {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.96);
+    color: #17223b;
+    border-radius: 12px;
+    padding: 13px 14px;
+    font-size: 15px;
+    outline: none;
+  }
+
+  input[type="text"]:focus,
+  input[type="file"]:focus {
+    border-color: rgba(77,132,255,0.8);
+    box-shadow: 0 0 0 3px rgba(47,108,246,0.18);
+  }
+
+  .btn {
+    border: 0;
+    background: linear-gradient(180deg, var(--primary-2), var(--primary));
+    color: white;
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+
+  .btn:hover { transform: translateY(-1px); }
+  .btn.secondary {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text);
+  }
+
+  .preset-users {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .chip {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, rgba(53,111,243,0.95), rgba(40,92,209,0.95));
+    color: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 110px;
+  }
+
+  .chip:hover { filter: brightness(1.07); }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text);
+    padding: 9px 12px;
+    border-radius: 999px;
+    font-size: 14px;
+  }
+
+  .tag button {
+    border: 0;
+    background: transparent;
+    color: #c8d6f4;
+    cursor: pointer;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .statusbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    align-items: center;
+  }
+
+  .statusbox {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .filters-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .select-ui {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.96);
+    color: #17223b;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    min-width: 180px;
+    outline: none;
+  }
+
+  .toggle-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text);
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .toggle-pill input {
+    margin: 0;
+    accent-color: var(--primary);
+  }
+
+  .table-wrap {
+    overflow: auto;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(6, 16, 40, 0.55);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 760px;
+  }
+
+  th, td {
+    padding: 14px 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: #14264a;
+    color: #f4f7ff;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  tr:hover td { background: rgba(255,255,255,0.018); }
+
+  .sticky-col {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: #0e2042;
+    text-align: left;
+    min-width: 270px;
+    max-width: 360px;
+  }
+
+  tr:hover .sticky-col { background: #11254b; }
+  th.sticky-col { z-index: 4; background: #14264a; }
+
+  .problem-link {
+    color: #ecf2ff;
+    text-decoration: none;
+    font-weight: 700;
+    display: block;
+  }
+
+  .problem-link:hover { color: #91b4ff; }
+
+  .problem-id {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .ok {
+    background: rgba(47, 158, 68, 0.18);
+    color: #bbf7c8;
+    font-weight: 800;
+  }
+
+  .no {
+    background: rgba(255,255,255,0.04);
+    color: #7e8ba8;
+  }
+
+  .count-cell {
+    color: white;
+    font-weight: 800;
+  }
+
+  .select-cell {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .select-cell input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  .empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 32px 16px;
+  }
+
+  .small-note {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .controls { grid-template-columns: 1fr; }
+    .page { width: min(100% - 16px, 1000px); }
+    .card { padding: 16px; border-radius: 16px; }
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding-inline: 2px; }
+    .brand-icon { width: 44px; height: 44px; font-size: 22px; }
+    .btn, .chip { width: 100%; }
+    .input-row .btn { width: auto; flex: 0 0 auto; }
+    .sticky-col { min-width: 220px; }
+    th, td { padding: 12px 10px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="brand">
+        <div class="brand-icon">📊</div>
+        <div>
+          <h1>Codeforces Tracker</h1>
+          <p class="subtitle">Load problem links from a file, add users dynamically, and track who solved what.</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div class="controls">
+        <div class="card">
+          <h2>📂 Load Problems</h2>
+          <p class="muted">Choose a text file that contains one full Codeforces problem link per line.</p>
+          <div class="row">
+            <input id="problemFile" type="file" accept=".txt,.csv,text/plain" />
+          </div>
+          <div class="small-note">
+            Supported examples:<br>
+            https://codeforces.com/contest/1519/problem/C<br>
+            https://codeforces.com/problemset/problem/1519/C
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>👥 Users</h2>
+          <p class="muted">Add any handle manually, or tap a preset button to add it quickly.</p>
+          <div class="input-row">
+            <input id="userInput" type="text" placeholder="Enter Codeforces handle..." />
+            <button class="btn" id="addUserBtn">Add User</button>
+          </div>
+          <div class="preset-users" id="presetUsers"></div>
+          <div class="tag-list" id="activeUsers"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="statusbar">
+          <div class="statusbox" id="summaryText">Add users and load a file to start.</div>
+          <div class="action-buttons">
+            <button class="btn secondary" onclick="selectAllRows()">☑ Select All</button>
+            <button class="btn secondary" onclick="deselectAllRows()">☐ Deselect All</button>
+            <button class="btn secondary" onclick="copySelected()">📋 Copy Selected</button>
+            <button class="btn secondary" onclick="downloadSelected()">📄 Download TXT</button>
+            <button class="btn" onclick="build()">🔄 Refresh</button>
+          </div>
+        </div>
+
+        <div class="filters-bar">
+          <div class="filter-group">
+            <label class="muted" for="mainUserFilter" style="margin:0;">Main user</label>
+            <select id="mainUserFilter" class="select-ui"></select>
+          </div>
+          <div class="filter-group">
+            <label class="toggle-pill"><input type="checkbox" id="filterUnsolvedByMe"> Unsolved by main user</label>
+            <label class="toggle-pill"><input type="checkbox" id="filterSolvedByNobody"> Solved by nobody</label>
+          </div>
+        </div>
+
+        <div class="table-wrap" id="wrap">
+          <div class="empty">No data yet. Add at least one user and choose a problem file.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script>
+  const presetUsers = ["Mo-Anwar", "AmrYasser1", "yehia.", "Hazemam", "AbdoMo", "Domzi1"];
+  const users = [];
+  let loadedProblems = [];
+  let solved = {};
+  let problemLookup = new Map();
+
+  const presetUsersWrap = document.getElementById("presetUsers");
+  const activeUsersWrap = document.getElementById("activeUsers");
+  const summaryText = document.getElementById("summaryText");
+  const fileInput = document.getElementById("problemFile");
+  const userInput = document.getElementById("userInput");
+  const mainUserFilter = document.getElementById("mainUserFilter");
+  const filterUnsolvedByMe = document.getElementById("filterUnsolvedByMe");
+  const filterSolvedByNobody = document.getElementById("filterSolvedByNobody");
+
+  renderPresetUsers();
+  renderActiveUsers();
+
+  document.getElementById("addUserBtn").addEventListener("click", () => addUser(userInput.value));
+  userInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") addUser(userInput.value);
+  });
+  fileInput.addEventListener("change", handleProblemFile);
+  mainUserFilter.addEventListener("change", buildTable);
+  filterUnsolvedByMe.addEventListener("change", buildTable);
+  filterSolvedByNobody.addEventListener("change", buildTable);
+
+  function renderPresetUsers() {
+    presetUsersWrap.innerHTML = "";
+    presetUsers.forEach(handle => {
+      const btn = document.createElement("button");
+      btn.className = "chip";
+      btn.textContent = handle;
+      btn.onclick = () => addUser(handle);
+      presetUsersWrap.appendChild(btn);
+    });
+  }
+
+  function renderActiveUsers() {
+    activeUsersWrap.innerHTML = "";
+    if (!users.length) {
+      activeUsersWrap.innerHTML = '<span class="tag">No users added yet</span>';
+      renderMainUserOptions();
+      updateSummary();
+      return;
+    }
+    users.forEach((handle, index) => {
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.innerHTML = `${escapeHtml(handle)} <button title="Remove" onclick="removeUser(${index})">×</button>`;
+      activeUsersWrap.appendChild(tag);
+    });
+    renderMainUserOptions();
+    updateSummary();
+  }
+
+
+  function renderMainUserOptions() {
+    const previous = mainUserFilter.value;
+    mainUserFilter.innerHTML = users.length
+      ? users.map(handle => `<option value="${escapeHtml(handle)}">${escapeHtml(handle)}</option>`).join("")
+      : '<option value="">No users yet</option>';
+
+    if (users.length) {
+      const stillExists = users.some(handle => handle === previous);
+      mainUserFilter.value = stillExists ? previous : users[0];
+      mainUserFilter.disabled = false;
+    } else {
+      mainUserFilter.disabled = true;
+    }
+  }
+
+  function getVisibleProblems() {
+    const mainUser = mainUserFilter.value;
+    return loadedProblems.filter(problem => {
+      const solvedCount = users.reduce((acc, user) => acc + (solved[user]?.has(problem.id) ? 1 : 0), 0);
+      if (filterUnsolvedByMe.checked && mainUser && solved[mainUser]?.has(problem.id)) return false;
+      if (filterSolvedByNobody.checked && solvedCount !== 0) return false;
+      return true;
+    });
+  }
+
+  function addUser(rawHandle) {
+    const handle = String(rawHandle || "").trim();
+    if (!handle) return;
+    if (users.some(u => u.toLowerCase() === handle.toLowerCase())) {
+      userInput.value = "";
+      return;
+    }
+    users.push(handle);
+    userInput.value = "";
+    renderActiveUsers();
+  }
+
+  function removeUser(index) {
+    users.splice(index, 1);
+    renderActiveUsers();
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  async function handleProblemFile(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const text = await file.text();
+    loadedProblems = parseProblemLinks(text);
+    await loadProblemMetadata();
+    updateSummary();
+    if (users.length && loadedProblems.length) build();
+    else buildTable();
+  }
+
+  function parseProblemLinks(text) {
+    const unique = new Map();
+    const lines = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+
+    for (const raw of lines) {
+      const clean = raw.replace(/[),.;]+$/g, "");
+      const parsed = parseCodeforcesLink(clean);
+      if (!parsed) continue;
+      const id = `${parsed.contestId}${parsed.index}`;
+      if (!unique.has(id)) {
+        unique.set(id, {
+          id,
+          contestId: parsed.contestId,
+          index: parsed.index,
+          link: parsed.link,
+          name: id
+        });
+      }
+    }
+
+    return [...unique.values()];
+  }
+
+  function parseCodeforcesLink(link) {
+    try {
+      const url = new URL(link);
+      if (!/codeforces\.com$/i.test(url.hostname)) return null;
+
+      const contestMatch = url.pathname.match(/^\/contest\/(\d+)\/problem\/([A-Za-z0-9]+)\/?$/i);
+      if (contestMatch) {
+        return {
+          contestId: contestMatch[1],
+          index: contestMatch[2].toUpperCase(),
+          link: `https://codeforces.com/contest/${contestMatch[1]}/problem/${contestMatch[2].toUpperCase()}`
+        };
+      }
+
+      const problemsetMatch = url.pathname.match(/^\/problemset\/problem\/(\d+)\/([A-Za-z0-9]+)\/?$/i);
+      if (problemsetMatch) {
+        return {
+          contestId: problemsetMatch[1],
+          index: problemsetMatch[2].toUpperCase(),
+          link: `https://codeforces.com/problemset/problem/${problemsetMatch[1]}/${problemsetMatch[2].toUpperCase()}`
+        };
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  async function loadProblemMetadata() {
+    if (!loadedProblems.length) return;
+    try {
+      const res = await fetch("https://codeforces.com/api/problemset.problems");
+      const data = await res.json();
+      if (data.status !== "OK") return;
+      problemLookup = new Map();
+      data.result.problems.forEach(problem => {
+        const key = `${problem.contestId}${String(problem.index).toUpperCase()}`;
+        problemLookup.set(key, problem);
+      });
+
+      loadedProblems = loadedProblems.map(problem => {
+        const meta = problemLookup.get(problem.id);
+        return {
+          ...problem,
+          name: meta?.name || problem.id,
+          link: problem.link || `https://codeforces.com/problemset/problem/${problem.contestId}/${problem.index}`
+        };
+      });
+    } catch (e) {
+      console.error("Failed to load problem metadata", e);
+    }
+  }
+
+  async function fetchSubs(user) {
+    try {
+      const res = await fetch(`https://codeforces.com/api/user.status?handle=${encodeURIComponent(user)}&count=5000`);
+      const data = await res.json();
+      return data.status === "OK" ? data.result : [];
+    } catch (e) {
+      console.error(`Error fetching ${user}`, e);
+      return [];
+    }
+  }
+
+  async function build() {
+    if (!users.length || !loadedProblems.length) {
+      buildTable();
+      return;
+    }
+
+    summaryText.textContent = "Loading user submissions...";
+    solved = {};
+
+    await Promise.all(users.map(async (u) => {
+      solved[u] = new Set();
+      const subs = await fetchSubs(u);
+      for (const s of subs) {
+        if (s.verdict !== "OK") continue;
+        if (!s.problem?.contestId || !s.problem?.index) continue;
+        const pid = `${s.problem.contestId}${String(s.problem.index).toUpperCase()}`;
+        solved[u].add(pid);
+      }
+    }));
+
+    buildTable();
+  }
+
+  function buildTable() {
+    const wrap = document.getElementById("wrap");
+
+    if (!loadedProblems.length) {
+      wrap.innerHTML = '<div class="empty">Choose a problem file to load the table.</div>';
+      updateSummary();
+      return;
+    }
+
+    if (!users.length) {
+      wrap.innerHTML = '<div class="empty">Add at least one user to build the tracker table.</div>';
+      updateSummary();
+      return;
+    }
+
+    const visibleProblems = getVisibleProblems();
+
+    if (!visibleProblems.length) {
+      wrap.innerHTML = '<div class="empty">No problems match the current filters.</div>';
+      updateSummary();
+      return;
+    }
+
+    const table = document.createElement("table");
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th class="sticky-col">Problem</th>
+          ${users.map(u => `<th>${escapeHtml(u)}</th>`).join("")}
+          <th>Solved by</th>
+          <th>Select</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    `;
+
+    const tbody = table.querySelector("tbody");
+
+    visibleProblems.forEach((p) => {
+      let count = 0;
+      const tr = document.createElement("tr");
+
+      const nameCell = document.createElement("td");
+      nameCell.className = "sticky-col";
+      nameCell.innerHTML = `
+        <a class="problem-link" href="${p.link}" target="_blank" rel="noopener noreferrer">${escapeHtml(p.name)}</a>
+        <span class="problem-id">${escapeHtml(p.id)}</span>
+      `;
+      tr.appendChild(nameCell);
+
+      users.forEach(u => {
+        const ok = solved[u]?.has(p.id);
+        if (ok) count++;
+        const td = document.createElement("td");
+        td.className = ok ? "ok" : "no";
+        td.textContent = ok ? "✔" : "–";
+        tr.appendChild(td);
+      });
+
+      const percent = users.length ? count / users.length : 0;
+      const r = Math.round(150 + (47 - 150) * percent);
+      const g = Math.round(42 + (158 - 42) * percent);
+      const b = Math.round(75 + (68 - 75) * percent);
+      const countCell = document.createElement("td");
+      countCell.className = "count-cell";
+      countCell.style.background = `rgb(${r}, ${g}, ${b})`;
+      countCell.textContent = `${count}/${users.length}`;
+      tr.appendChild(countCell);
+
+      const selectCell = document.createElement("td");
+      selectCell.className = "select-cell";
+      const originalIndex = loadedProblems.findIndex(problem => problem.id === p.id);
+      selectCell.innerHTML = `<input type="checkbox" data-index="${originalIndex}" aria-label="Select ${escapeHtml(p.name)}">`;
+      selectCell.addEventListener("click", (e) => {
+        const checkbox = selectCell.querySelector("input");
+        if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
+      });
+      tr.appendChild(selectCell);
+
+      tbody.appendChild(tr);
+    });
+
+    wrap.innerHTML = "";
+    wrap.appendChild(table);
+    updateSummary();
+  }
+
+  function updateSummary() {
+    const problemCount = loadedProblems.length;
+    const userCount = users.length;
+    const visibleCount = getVisibleProblems().length;
+    if (!problemCount && !userCount) {
+      summaryText.textContent = "Add users and load a file to start.";
+      return;
+    }
+
+    let extra = "";
+    if (problemCount && userCount) {
+      extra = ` • ${visibleCount} visible`;
+      if (filterUnsolvedByMe.checked && mainUserFilter.value) extra += ` • unsolved by ${mainUserFilter.value}`;
+      if (filterSolvedByNobody.checked) extra += " • solved by nobody";
+    }
+
+    summaryText.textContent = `${problemCount} problems loaded • ${userCount} users selected${extra}`;
+  }
+
+  function getSelectedLinks() {
+    return [...document.querySelectorAll('.select-cell input[type="checkbox"]:checked')]
+      .map(box => loadedProblems[Number(box.dataset.index)]?.link)
+      .filter(Boolean);
+  }
+
+  function copySelected() {
+    const links = getSelectedLinks();
+    if (!links.length) {
+      alert("No problems selected");
+      return;
+    }
+    navigator.clipboard.writeText(links.join("\n"));
+    alert("Selected links copied");
+  }
+
+  function downloadSelected() {
+    const links = getSelectedLinks();
+    if (!links.length) {
+      alert("No problems selected");
+      return;
+    }
+    const blob = new Blob([links.join("\n")], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "selected_problems.txt";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function selectAllRows() {
+    document.querySelectorAll('.select-cell input[type="checkbox"]').forEach(cb => cb.checked = true);
+  }
+
+  function deselectAllRows() {
+    document.querySelectorAll('.select-cell input[type="checkbox"]').forEach(cb => cb.checked = false);
+  }
+</script>
+</body>
+</html>
