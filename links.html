@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VJudge Sheet Problems</title>
+  <style>
+    :root {
+      --bg: #111315;
+      --panel: #1a1d21;
+      --header: #3c3c3c;
+      --row1: #181a1d;
+      --row2: #222529;
+      --border: #3a3f45;
+      --text: #e7e7e7;
+      --muted: #cfcfcf;
+      --link: #35b8f1;
+      --link-hover: #7fd7ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .table-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      background: var(--header);
+      color: var(--muted);
+      font-weight: 700;
+      text-align: center;
+      padding: 16px 12px;
+      border-right: 1px solid var(--border);
+      font-size: 15px;
+    }
+
+    thead th:last-child {
+      border-right: none;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: var(--row2);
+    }
+
+    tbody tr:nth-child(even) {
+      background: var(--row1);
+    }
+
+    tbody td {
+      padding: 14px 12px;
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      font-size: 15px;
+    }
+
+    tbody td:last-child {
+      border-right: none;
+    }
+
+    .col-stat {
+      width: 90px;
+      text-align: center;
+      color: #888;
+    }
+
+    .col-letter {
+      width: 70px;
+      text-align: center;
+      font-weight: bold;
+      color: #d8d8d8;
+    }
+
+    .col-origin {
+      width: 220px;
+      text-align: center;
+    }
+
+    .col-title {
+      min-width: 320px;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--link-hover);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 10px;
+      }
+
+      thead th,
+      tbody td {
+        padding: 10px 8px;
+        font-size: 13px;
+      }
+
+      .col-origin {
+        width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-stat">Stat</th>
+          <th class="col-letter">#</th>
+          <th class="col-origin">Origin</th>
+          <th class="col-title">Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">A</td>
+          <td class="col-origin"><a href="https://onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=288" target="_blank">UVA 352</a></td>
+          <td class="col-title">The Seasonal War</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">B</td>
+          <td class="col-origin"><a href="https://codeforces.com/problemset/problem/242/C" target="_blank">CodeForces 242C</a></td>
+          <td class="col-title">King's Path</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">C</td>
+          <td class="col-origin"><a href="https://codeforces.com/problemset/problem/1057/C" target="_blank">CodeForces 1057C</a></td>
+          <td class="col-title">Tanya and Colored Candies</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">D</td>
+          <td class="col-origin"><a href="https://onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=2853" target="_blank">UVA 11753</a></td>
+          <td class="col-title">Creating Palindrome</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">E</td>
+          <td class="col-origin"><a href="https://codeforces.com/problemset/problem/506/A" target="_blank">CodeForces 506A</a></td>
+          <td class="col-title">Mr. Kitayuta, the Treasure Hunter</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">F</td>
+          <td class="col-origin"><a href="https://codeforces.com/problemset/problem/190/C" target="_blank">CodeForces 190C</a></td>
+          <td class="col-title">STL</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">G</td>
+          <td class="col-origin"><a href="https://codeforces.com/problemset/problem/270/D" target="_blank">CodeForces 270D</a></td>
+          <td class="col-title">Greenhouse Effect</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">H</td>
+          <td class="col-origin"><a href="https://onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=548" target="_blank">UVA 607</a></td>
+          <td class="col-title">Scheduling Lectures</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">I</td>
+          <td class="col-origin"><a href="https://codeforces.com/problemset/problem/233/C" target="_blank">CodeForces 233C</a></td>
+          <td class="col-title">Cycles</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">J</td>
+          <td class="col-origin"><a href="https://codeforces.com/problemset/problem/862/B" target="_blank">CodeForces 862B</a></td>
+          <td class="col-title">Mahmoud and Ehab and the bipartiteness</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">K</td>
+          <td class="col-origin"><a href="https://onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=2326" target="_blank">UVA 11341</a></td>
+          <td class="col-title">Term Strategy</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">L</td>
+          <td class="col-origin"><a href="https://codeforces.com/problemset/problem/340/D" target="_blank">CodeForces 340D</a></td>
+          <td class="col-title">Bubble Sort Graph</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">M</td>
+          <td class="col-origin"><a href="https://codeforces.com/problemset/problem/216/B" target="_blank">CodeForces 216B</a></td>
+          <td class="col-title">Forming Teams</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">N</td>
+          <td class="col-origin"><a href="https://codeforces.com/problemset/problem/265/D" target="_blank">CodeForces 265D</a></td>
+          <td class="col-title">Good Sequences</td>
+        </tr>
+        <tr>
+          <td class="col-stat"></td>
+          <td class="col-letter">O</td>
+          <td class="col-origin"><a href="https://onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=1393" target="_blank">UVA 10452</a></td>
+          <td class="col-title">Marcus</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
