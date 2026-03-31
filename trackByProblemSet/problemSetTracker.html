@@ -366,6 +366,24 @@
     line-height: 1.5;
   }
 
+  .problem-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .problem-tag {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    background: rgba(77,132,255,0.16);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #dbe7ff;
+    white-space: nowrap;
+  }
+
   @media (max-width: 900px) {
     .controls { grid-template-columns: 1fr; }
     .page { width: min(100% - 16px, 1000px); }
@@ -629,11 +647,20 @@
         problemLookup.set(key, problem);
       });
 
+      // loadedProblems = loadedProblems.map(problem => {
+      //   const meta = problemLookup.get(problem.id);
+      //   return {
+      //     ...problem,
+      //     name: meta?.name || problem.id,
+      //     link: problem.link || `https://codeforces.com/problemset/problem/${problem.contestId}/${problem.index}`
+      //   };
+      // });
       loadedProblems = loadedProblems.map(problem => {
         const meta = problemLookup.get(problem.id);
         return {
           ...problem,
           name: meta?.name || problem.id,
+          tags: meta?.tags || [],
           link: problem.link || `https://codeforces.com/problemset/problem/${problem.contestId}/${problem.index}`
         };
       });
@@ -723,6 +750,9 @@
       nameCell.innerHTML = `
         <a class="problem-link" href="${p.link}" target="_blank" rel="noopener noreferrer">${escapeHtml(p.name)}</a>
         <span class="problem-id">${escapeHtml(p.id)}</span>
+        <div class="problem-tags">
+          ${(p.tags || []).map(tag => `<span class="problem-tag">${escapeHtml(tag)}</span>`).join("")}
+        </div>
       `;
       tr.appendChild(nameCell);
 
