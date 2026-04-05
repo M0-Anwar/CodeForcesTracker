@@ -1,109 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Problems Table</title>
-<style>
-  body {
-    background-color: #1e1e1e;
-    color: #ddd;
-    font-family: Arial, sans-serif;
-  }
-  table {
-    width: 80%;
-    margin: 40px auto;
-    border-collapse: collapse;
-  }
-  th, td {
-    padding: 10px;
-    border-bottom: 1px solid #444;
-    text-align: left;
-  }
-  th {
-    background-color: #333;
-  }
-  tr:hover {
-    background-color: #2a2a2a;
-  }
-  a {
-    color: #4fc3f7;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Codeforces Problems Table</title>
+  <style>
+    body {
+      background: #1e1e1e;
+      color: #ddd;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .table-container {
+      max-width: 1200px;
+      margin: auto;
+      overflow-x: auto;
+      border: 1px solid #3a3a3a;
+      border-radius: 8px;
+      background: #232323;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead tr {
+      background: #3a3a3a;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #3a3a3a;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #252525;
+    }
+
+    tbody tr:hover {
+      background: #2d2d2d;
+    }
+
+    a {
+      color: #4fc3f7;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      background: #353535;
+      color: #cfcfcf;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    .status {
+      max-width: 1200px;
+      margin: 0 auto 16px;
+      color: #bbb;
+    }
+
+    .error {
+      color: #ff8a8a;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="status" id="status">Loading problems...</div>
 
-<table>
-  <tr>
-    <th>#</th>
-    <th>Origin</th>
-    <th>Title</th>
-  </tr>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Origin</th>
+          <th>Title</th>
+          <th>Rating</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody id="problems-body"></tbody>
+    </table>
+  </div>
 
-  <tr>
-    <td>A</td>
-    <td><a href="https://codeforces.com/problemset/problem/792/C" target="_blank">CodeForces 792C</a></td>
-    <td>Divide by Three</td>
-  </tr>
+  <script>
+    const problemsInput = [
+      {id : "792C"},
+      {id : "313D"},
+      {id : "988F"},
+      {id : "999F"},
+      {id : "1066F"},
+      {id : "1154F"},
+      {id : "984D"},
+      {id : "1625C"},
+    ];
 
-  <tr>
-    <td>B</td>
-    <td><a href="https://codeforces.com/problemset/problem/313/D" target="_blank">CodeForces 313D</a></td>
-    <td>Ilya and Roads</td>
-  </tr>
+    const tableBody = document.getElementById("problems-body");
 
-  <tr>
-    <td>C</td>
-    <td><a href="https://codeforces.com/problemset/problem/988/F" target="_blank">CodeForces 988F</a></td>
-    <td>Rain and Umbrellas</td>
-  </tr>
+    function isCodeforces(problem) {
+      return !problem.platform; // no platform = CF
+    }
 
-  <tr>
-    <td>D</td>
-    <td><a href="https://codeforces.com/problemset/problem/999/F" target="_blank">CodeForces 999F</a></td>
-    <td>Cards and Joy</td>
-  </tr>
+    function buildCFKey(problem) {
+      return problem.id.toUpperCase();
+    }
 
-  <tr>
-    <td>E</td>
-    <td><a href="https://codeforces.com/problemset/problem/1066/F" target="_blank">CodeForces 1066F</a></td>
-    <td>Yet another 2D Walking</td>
-  </tr>
+    async function loadProblems() {
+      const response = await fetch("https://codeforces.com/api/problemset.problems");
+      const data = await response.json();
 
-  <tr>
-    <td>F</td>
-    <td><a href="https://codeforces.com/problemset/problem/1154/F" target="_blank">CodeForces 1154F</a></td>
-    <td>Shovels Shop</td>
-  </tr>
+      const allProblems = data.result.problems;
+      const map = new Map();
 
-  <tr>
-    <td>G</td>
-    <td><a href="https://codeforces.com/problemset/problem/984/D" target="_blank">CodeForces 984D</a></td>
-    <td>XOR-pyramid</td>
-  </tr>
+      // build CF map
+      for (const p of allProblems) {
+        map.set((p.contestId + p.index).toUpperCase(), p);
+      }
 
-  <tr>
-    <td>H</td>
-    <td><a href="https://codeforces.com/problemset/problem/1625/C" target="_blank">CodeForces 1625C</a></td>
-    <td>Road Optimization</td>
-  </tr>
+      let rows = "";
 
-  <tr>
-    <td>I</td>
-    <td><a href="https://onlinejudge.org/external/1/101.html" target="_blank">UVA 101</a></td>
-    <td>The Blocks Problem</td>
-  </tr>
+      problemsInput.forEach((item, idx) => {
+        // ✅ CASE 1: Codeforces
+        if (isCodeforces(item)) {
+          const p = map.get(buildCFKey(item));
 
-  <tr>
-    <td>J</td>
-    <td><a href="https://onlinejudge.org/external/114/11404.html" target="_blank">UVA 11404</a></td>
-    <td>Palindromic Subsequence</td>
-  </tr>
+          if (!p) {
+            rows += `<tr><td>${idx + 1}</td><td>${item.id}</td><td colspan="3">Not found</td></tr>`;
+            return;
+          }
 
-</table>
+          const url = `https://codeforces.com/problemset/problem/${p.contestId}/${p.index}`;
 
+          rows += `
+        <tr>
+          <td>${idx + 1}</td>
+          <td><a href="${url}" target="_blank">CodeForces ${p.contestId}${p.index}</a></td>
+          <td>${p.name}</td>
+          <td>${p.rating ?? "-"}</td>
+          <td>${p.tags.map(t => `<span class="tag">${t}</span>`).join("")}</td>
+        </tr>
+      `;
+        }
+
+        // ✅ CASE 2: Non-Codeforces
+        else {
+          rows += `
+        <tr>
+          <td>${idx + 1}</td>
+          <td><a href="${item.link}" target="_blank">${item.platform} ${item.id}</a></td>
+          <td>${item.title}</td>
+          <td>${item.rating}</td>
+          <td>${item.tags.map(t => `<span class="tag">${t}</span>`).join("")}</td>
+        </tr>
+      `;
+        }
+      });
+
+      tableBody.innerHTML = rows;
+    }
+
+    loadProblems();
+  </script>
 </body>
+
 </html>
