@@ -124,6 +124,13 @@
       return problem.id.toUpperCase();
     }
 
+    function buildCFUrl(id) {
+      const contestId = id.match(/\d+/)[0];
+      const index = id.match(/[A-Z]+$/i)[0].toUpperCase();
+
+      return `https://codeforces.com/problemset/problem/${contestId}/${index}`;
+    }
+
     async function loadProblems() {
       const response = await fetch("https://codeforces.com/api/problemset.problems");
       const data = await response.json();
@@ -144,7 +151,17 @@
           const p = map.get(buildCFKey(item));
 
           if (!p) {
-            rows += `<tr><td>${idx + 1}</td><td>${item.id}</td><td colspan="3">Not found</td></tr>`;
+            const url = buildCFUrl(item.id);
+          
+            rows += `
+              <tr>
+                <td>${idx + 1}</td>
+                <td><a href="${url}" target="_blank">CodeForces ${item.id}</a></td>
+                <td>Not found in API</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+            `;
             return;
           }
 
